@@ -1,0 +1,77 @@
+version: "3.9"
+services:
+    postgres:
+        image: digitiamo/postgres:v14.9
+        build:
+            context: ./docker/postgres/
+            dockerfile: Dockerfile
+        logging:
+            driver: "json-file"
+            options:
+                max-file: "1"
+                max-size: 1024m
+        user: postgres
+        container_name: postgres
+        environment:
+            - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+            - POSTGRES_DB=$POSTGRES_DB
+            - POSTGRES_HOST_AUTH_METHOD=scram-sha-256
+        hostname: host-postgres
+        restart: always
+        mem_limit: 2048m
+        mem_reservation: 1024m
+        command: -c config_file=/etc/postgresql.conf
+        networks:
+            DefaultNet:
+                ipv4_address: 172.20.0.2
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        healthcheck:
+            test: pg_isready -d ${POSTGRES_DB} -U postgres -p 5432
+            interval: 30s
+            timeout: 5s
+            retries: 5
+    
+    backend:
+        image: digitiamo/django
+        build:
+            context: ./backend/
+            dockerfile: ./Dockerfile
+        logging:
+            driver: "json-file"
+            options:
+                max-file: "1"
+                max-size: 1024m
+        container_name: backend
+        environment:
+            - DB_NAME=$DB_NAME
+            - DB_USER=$DB_USER
+            - DB_PASSWORD=$DB_PASSWORD
+            - DB_HOST=$DB_HOST
+            - DB_PORT=$DB_PORT
+        hostname: host-backend
+        user: root
+        restart: always
+        mem_limit: 4096m
+        mem_reservation: 1024m
+        ports:
+            - "8000:8000"
+        networks:
+            DefaultNet:
+                ipv4_address: 172.20.0.3
+        depends_on:
+            postgres:
+                condition: service_healthy
+
+volumes:
+    postgres_data:
+        name: postgres_data
+
+networks:
+    DefaultNet:
+        name: internal_network
+        ipam:
+            config:
+                - subnet: 172.20.0.0/24

@@ -1,0 +1,6 @@
+.digitiamo/
+.pytest_cache/
+.vscode/
+README.MD
+__pycache__
+db.sqlite3
