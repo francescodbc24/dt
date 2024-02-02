@@ -29,6 +29,18 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
   const navigate = useNavigate();
 
   let { code } = useParams();
+  const methods = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"];
+  const message:any = {
+    200: "Great,Everything's fine",
+    201: "Congratulations! Your request has successfully manifested into existence.",
+    204: "No content here, just like my weekend plans..",
+    400: "Your request is like a bad joke – nobody gets it.",
+    401:"Access denied: even the server doesn't trust you.",
+    404: "not found. Story of my life",
+    405: "Nope, not that method!",
+    429: "The server needs a breather from all your requests.",
+    500: "Something went wrong, and now the server is contemplating its life choices",
+  };
 
   const handleAnalyseUrl = async (values: FormikValues) => {
     try {
@@ -68,7 +80,7 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
       handleShareCode(code);
     }
   }, [code]);
-
+  const disabled = code != undefined ? true : false;
   console.log("Render");
   return (
     <Container>
@@ -78,7 +90,7 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
           {state.data && (
             <>
               <h1>{state.data?.status_code}</h1>
-              <span>Great!</span>
+              <span>{message[state.data.status_code]}</span>
             </>
           )}
         </Col>
@@ -97,14 +109,14 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
               <div className="d-flex flex-row justify-content-around text-center">
                 <div className="flex-grow-2">
                   <AppFormSelect
-                    readOnly={code}
+                    readOnly={disabled}
                     name="method"
-                    options={["GET", "POST"]}
+                    options={methods}
                   />
                 </div>
                 <div className="flex-grow-1">
                   <AppFormText
-                    readOnly={code}
+                    readOnly={disabled}
                     name="url"
                     placeholder="Write an url..."
                   />

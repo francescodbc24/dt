@@ -30,7 +30,7 @@ class RequestHTTPResponseSerializer(serializers.ModelSerializer):
             }
         fields= [
             'id',
-              'status_code',
+            'status_code',
             'share',
             'url',
             'method',
@@ -44,7 +44,7 @@ class RequestHTTPResponseSerializer(serializers.ModelSerializer):
         ]
     
     def is_valid(self,raise_exception: bool = False):
-        METHODS=['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS']
+        METHODS=['GET', 'POST', 'PUT', 'DELETE', 'HEAD',"PATCH", 'OPTIONS']
         if self.initial_data is None:
             raise serializers.ValidationError("data is expected as dict()")
         if 'url' not in self.initial_data:
