@@ -8,8 +8,9 @@ class Base(models.Model):
         abstract=True
 
 class RequestHTTP(Base):
-    url=models.TextField()
     share=models.CharField(unique=True,max_length=20)
+    url=models.TextField()
+    status_code=models.IntegerField()
     method = models.CharField(max_length=10)
     domain = models.TextField()
     scheme = models.TextField()
@@ -20,8 +21,9 @@ class RequestHTTP(Base):
         db_table = "request_http"
 
 class ResponseHTTP(Base):
-    code = models.IntegerField()
+    status_code = models.IntegerField()
     server = models.TextField()
+    date = models.TextField()
     location = models.TextField(blank=True)
     time = models.FloatField()
     reason = models.TextField()

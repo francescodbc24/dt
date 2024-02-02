@@ -13,6 +13,7 @@ from typing import List, Optional
 
 class Request(BaseModel):
     domain: Optional[str] = None
+    status_code: Optional[int] = None
     scheme: Optional[str] =None
     path: Optional[str] = None
     page_load: float = 0
@@ -24,6 +25,7 @@ class Response(BaseModel):
     time: Optional[float] = None
     http_version:  Optional[str] = None
     server:  Optional[str] = None
+    date:  Optional[str] = None
     location:  Optional[str] = None
 
 class Metrics(BaseModel):
@@ -47,12 +49,14 @@ class UrlService():
         request.domain=response_get.request.url.host
         request.scheme=response_get.request.url.scheme
         request.path=response_get.request.url.path
+        request.status_code=response_get.status_code
 
         response=Response(reason=response_get.reason_phrase,
                  code=response_get.status_code,
                  time=response_get.elapsed.total_seconds(),
                  http_version=response_get.http_version,
                  server=self.__get_header(response_get.headers,"server"),
+                 date=self.__get_header(response_get.headers,"date"),
                  location=self.__get_header(response_get.headers,"location"))
         responses.append(response)
 
@@ -61,6 +65,7 @@ class UrlService():
                                 code=history.status_code,
                                 time=history.elapsed.total_seconds(),
                                 http_version=history.http_version,
+                                date=self.__get_header(response_get.headers,"date"),
                                 server=self.__get_header(history.headers,"server"),
                                 location=self.__get_header(history.headers,"location"))
             responses.append(response)
@@ -79,13 +84,13 @@ class UrlService():
         full_url = base_url.format(url)
         response = httpx.get(full_url,timeout=60)
         data=response.json()
-        first_content_paint=data['lighthouseResult']['audits']['first-contentful-paint']
-        speed_infex=data['lighthouseResult']['audits']['speed-index'],
-        first_iteration=data["lighthouseResult"]["audits"]['interactive'] # . display value can be
-        
+        if not response.is_error and data is not None:
+            first_content_paint=data['lighthouseResult']['audits']['first-contentful-paint']
+            speed_infex=data['lighthouseResult']['audits']['speed-index'],
+            first_iteration=data["lighthouseResult"]["audits"]['interactive'] # . display value can be
       
-        metrics.page_load =first_content_paint['numericValue'] / 1000 
-        metrics.first_iteration=first_iteration['numericValue'] / 1000
+            metrics.page_load =first_content_paint['numericValue'] / 1000 
+            metrics.first_iteration=first_iteration['numericValue'] / 1000
         
         return metrics
     

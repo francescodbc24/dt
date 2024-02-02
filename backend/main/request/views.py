@@ -35,6 +35,7 @@ def get(request):
 ##TODO TRY CATCH
 @api_view(['POST'])
 def post(request,method):
+    try:
 
     # set method to request data dict to be validate
         data=request.data.copy()
@@ -53,15 +54,17 @@ def post(request,method):
                                 scheme=request.scheme,
                                 path=request.path,
                                 method=method,
+                                status_code=request.status_code,
                                 share=generate_unique_code(10),
                                 page_load=request.page_load,
                                 first_iteration=request.first_iteration)
 
         bulk_data:List[ResponseHTTP]=[]
         for item in responses:
-                obj=ResponseHTTP(request=entity,code=item.code,
+                obj=ResponseHTTP(request=entity,status_code=item.code,
                                  server=item.server,
                                  location=item.location,
+                                 date=item.date,
                                  reason=item.reason,
                                  http_version=item.http_version,
                                  time=item.time)
@@ -72,6 +75,8 @@ def post(request,method):
         result=ResponseHTTP.objects.bulk_create(bulk_data)
         serializer=RequestHTTPResponseSerializer(entity,many=False)
         return Ok(serializer.data)
+    except:
+        return InternalServerError('error' + str(sys.exc_info()[0]) + ' --- ' + str(sys.exc_info()[1]))
 
 @api_view(['GET'])
 def get_by_code(request,code):

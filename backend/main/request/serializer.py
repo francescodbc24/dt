@@ -7,8 +7,9 @@ class ResponseHTTPSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResponseHTTP
         fields= [
-            'code',
+            'status_code',
             'server',
+            'date',
             'time',
             'location',
             'reason',
@@ -29,6 +30,7 @@ class RequestHTTPResponseSerializer(serializers.ModelSerializer):
             }
         fields= [
             'id',
+              'status_code',
             'share',
             'url',
             'method',
