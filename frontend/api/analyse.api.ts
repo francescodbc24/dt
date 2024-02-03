@@ -40,14 +40,21 @@ class UrlAnalyserService {
   private http = instance;
   private endpoint = "http/";
   private endpoint_code = "shared/";
+  private endpoint_csfr = "csrf/";
+
+  setCsfr = async (): Promise<Wrapper> => {
+    return this.getPromise<Wrapper>(this.http.get(this.endpoint_csfr));
+  };
 
   get = (code: string): Promise<Wrapper> => {
-    return this.getPromise<Wrapper>(this.http.get(this.endpoint_code + code + "/"));
+    return this.getPromise<Wrapper>(
+      this.http.get(this.endpoint_code + code + "/", { withCredentials: true })
+    );
   };
 
   post = (data: InputData): Promise<Wrapper> => {
     return this.getPromise(
-      this.http.post(this.endpoint + data.method + "/", data)
+      this.http.post(this.endpoint + data.method + "/", data, {})
     );
   };
 

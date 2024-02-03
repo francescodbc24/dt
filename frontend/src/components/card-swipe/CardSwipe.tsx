@@ -13,13 +13,13 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
   first_iteraction = 0,
 }) => {
   const config = {
-    delta: 1, // min distance(px) before a swipe starts. *See Notes*
-    preventScrollOnSwipe: false, // prevents scroll during swipe (*See Details*)
+    delta: 1, // min distance(px) before a swipe starts.
+    preventScrollOnSwipe: false, // prevents scroll during swipe 
     trackTouch: true, // track touch input
-    trackMouse: false, // track mouse input
+    trackMouse: true, // track mouse input
     rotationAngle: 0, // set a rotation angle
-    swipeDuration: Infinity, // allowable duration of a swipe (ms). *See Notes*
-    touchEventOptions: { passive: true }, // options for touch listeners (*See Details*)
+    swipeDuration: Infinity, // allowable duration of a swipe (ms). 
+    touchEventOptions: { passive: true }, // options for touch listeners 
   };
   const [position, setPosition] = useState<number>(30);
   const handlers = useSwipeable({
@@ -41,7 +41,7 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
   });
   console.log("position", position);
   return (
-    <div {...handlers} style={{ height: position }} className="drawer">
+    <div {...handlers} style={{ height: position }} className="drawer d-block d-sm-none">
       <div className="d-flex justify-content-center text-center">
         <div className="box"></div>
       </div>

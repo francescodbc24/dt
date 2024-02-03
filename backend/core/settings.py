@@ -26,11 +26,15 @@ SECRET_KEY = 'django-insecure-h5w_p4uiavcnb*su+gk$ewyez81rcm*2o2jn%&j#*znp6$i8ga
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = ['*']
+
+CSRF_COOKIE_HTTPONLY = False
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
+
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = (
-    'content-disposition', 'accept-encoding', 'content-type', 'accept',
+    'X-CSRFToken','content-disposition', 'accept-encoding', 'content-type', 'accept',
     'origin', 'authorization', 'Expires', 'Pragma', 'Cache-Control')
 
 
@@ -117,14 +121,14 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'main.utils.exception_handler.custom_exception_handler',
     'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticated'
+        # 'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_THROTTLE_CLASSES': (
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle',
     ),
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '10/min',
+        'anon': '100/min',
         'user': '50/min'
     },
     'DEFAULT_RENDERER_CLASSES': (

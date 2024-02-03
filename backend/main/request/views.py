@@ -5,7 +5,7 @@ from .serializer import RequestHTTPResponseSerializer
 from typing import List
 from urllib.parse import urlparse
 from main.services.url_service import url_service
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie,csrf_protect
 from django.utils.decorators import method_decorator
 from rest_framework.permissions import AllowAny
 from http import HTTPMethod
@@ -22,6 +22,12 @@ def generate_unique_code(length:int):
     return code
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
+@ensure_csrf_cookie
+def get_csfr(request):
+    return Ok('CSRF Cookie set')
+
+@api_view(['GET'])
 def get(request):
     try:
         data=[]
@@ -30,10 +36,20 @@ def get(request):
         return Ok(serializer.data)   
     except Exception:
         return InternalServerError(message='error' + str(sys.exc_info()[0]) + ' --- ' + str(sys.exc_info()[1]))
-         
 
-##TODO TRY CATCH
+@api_view(['GET'])
+def get_by_code(request,code):
+    try:
+        data=__get_entity_by_id(code)
+        if data is None:
+             return NotFound("Shared code not found")
+        serializer=RequestHTTPResponseSerializer(data,many=False)
+        return Ok(serializer.data)
+    except Exception:
+        return InternalServerError('error' + str(sys.exc_info()[0]) + ' --- ' + str(sys.exc_info()[1]))
+      
 @api_view(['POST'])
+@csrf_protect
 def post(request,method):
     # set method to request data dict to be validate
     data=request.data.copy()
@@ -72,22 +88,6 @@ def post(request,method):
         return Ok(serializer.data)
     except:
         return InternalServerError('error' + str(sys.exc_info()[0]) + ' --- ' + str(sys.exc_info()[1]))
-
-@api_view(['GET'])
-def get_by_code(request,code):
-    try:
-        data=__get_entity_by_id(code)
-        if data is None:
-             return NotFound("Shared code not found")
-        serializer=RequestHTTPResponseSerializer(data,many=False)
-        return Ok(serializer.data)
-    except Exception:
-        return InternalServerError('error' + str(sys.exc_info()[0]) + ' --- ' + str(sys.exc_info()[1]))
-
-@permission_classes([AllowAny])
-@ensure_csrf_cookie
-def get_csfr(request):
-    return Response({'Success': 'CSRF Cookie set'})
 
 #region db
 

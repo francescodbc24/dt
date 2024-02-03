@@ -46,6 +46,7 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
   const handleAnalyseUrl = async (values: FormikValues) => {
     try {
       setState({ ...state, loading: true });
+      await url_service.setCsfr();
       const test = await url_service.post({
         url: values.url,
         method: values.method,
@@ -82,6 +83,8 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
       handleShareCode(code);
     }
   }, [code]);
+
+
   const disabled = code != undefined ? true : false;
   console.log("Render");
   return (
