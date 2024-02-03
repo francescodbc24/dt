@@ -35,19 +35,15 @@ def get(request):
 ##TODO TRY CATCH
 @api_view(['POST'])
 def post(request,method):
-    try:
-
     # set method to request data dict to be validate
-        data=request.data.copy()
-        data["method"]=method
-        serializer=RequestHTTPResponseSerializer(data=data)
-        serializer.is_valid()
-
+    data=request.data.copy()
+    data["method"]=method
+    serializer=RequestHTTPResponseSerializer(data=data)
+    serializer.is_valid()
+    try:
         url = data["url"]
         method=data["method"]
-
         request,responses=url_service.analyze_url(url,method)
-
 
         entity= RequestHTTP(domain=request.domain,
                                 url=url,
@@ -69,7 +65,6 @@ def post(request,method):
                                  http_version=item.http_version,
                                  time=item.time)
                 bulk_data.append(obj)
-
 
         entity.save()
         result=ResponseHTTP.objects.bulk_create(bulk_data)

@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import GridLoader from "react-spinners/GridLoader";
-import "./styles.css";
+import "./styles.scss";
 interface LoaderProps {
   loading: boolean;
 }
