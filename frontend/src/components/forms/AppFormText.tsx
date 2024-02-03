@@ -30,7 +30,7 @@ const AppFormText: FunctionComponent<FormTextProps> = ({
           setFieldValue(name, value, true);
         }}
       />
-      <Form.Text className="text-danger">{error && error}</Form.Text>
+      <Form.Text className="text-danger">{error && error as String}</Form.Text>
     </Form.Group>
   );
 };

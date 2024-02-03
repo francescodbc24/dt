@@ -14,24 +14,21 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
 }) => {
   const config = {
     delta: 1, // min distance(px) before a swipe starts.
-    preventScrollOnSwipe: false, // prevents scroll during swipe 
+    preventScrollOnSwipe: false, // prevents scroll during swipe
     trackTouch: true, // track touch input
     trackMouse: true, // track mouse input
     rotationAngle: 0, // set a rotation angle
-    swipeDuration: Infinity, // allowable duration of a swipe (ms). 
-    touchEventOptions: { passive: true }, // options for touch listeners 
+    swipeDuration: Infinity, // allowable duration of a swipe (ms).
+    touchEventOptions: { passive: true }, // options for touch listeners
   };
-  const [position, setPosition] = useState<number>(30);
+  const [position, setPosition] = useState<number>(3);
   const handlers = useSwipeable({
     onSwiping: (eventData) => {
       setPosition((prev) => {
         if (eventData.dir == "Up") {
-          const pos = prev + eventData.absY;
-          return pos > 800 ? 800 : pos;
+          return 80;
         } else if ((eventData.dir = "Down")) {
-          const pos = prev - eventData.absY;
-
-          return pos < 30 ? 30 : pos;
+          return 3;
         }
         return prev;
       });
@@ -41,7 +38,11 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
   });
   console.log("position", position);
   return (
-    <div {...handlers} style={{ height: position }} className="drawer d-block d-sm-none">
+    <div
+      {...handlers}
+      style={{ height: position + "vh" }}
+      className="drawer d-block d-sm-none"
+    >
       <div className="d-flex justify-content-center text-center">
         <div className="box"></div>
       </div>

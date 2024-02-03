@@ -9,7 +9,9 @@ const Loader: FunctionComponent<LoaderProps> = ({ loading }) => {
   return loading ? (
     <div className="back-drop">
       <div className="back-drop-container">
-        <GridLoader size={50} color={"blue"}></GridLoader>
+        <div className="back-drop-content">
+          <GridLoader size={50} color={"blue"}></GridLoader>
+        </div>
       </div>
     </div>
   ) : null;

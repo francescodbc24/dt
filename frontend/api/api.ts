@@ -1,4 +1,4 @@
-import axios, { AxiosPromise } from "axios";
+import axios from "axios";
 
 export const DEFAULT_HOST = "http://localhost:8000/api/";
 

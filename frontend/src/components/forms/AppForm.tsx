@@ -30,7 +30,7 @@ const AppForm: FunctionComponent<PropsWithChildren<AppFormProps>> = ({
       onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
-      {(props: any) => {
+      {() => {
         return <form>{children}</form>;
       }}
     </Formik>

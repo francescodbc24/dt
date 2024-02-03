@@ -10,7 +10,7 @@ export interface Wrapper {
 export interface RequestResult {
   id: number;
   share: string;
-  status_code: string;
+  status_code: number;
   url: string;
   method: string;
   domain: string;

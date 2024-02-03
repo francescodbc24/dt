@@ -5,13 +5,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { RequestResult, url_service } from "../../api/analyse.api";
 import RequestComponent from "../components/RequestComponent";
+import CardSwipe from "../components/card-swipe/CardSwipe";
 import AppForm from "../components/forms/AppForm";
 import AppFormSelect from "../components/forms/AppFormSelect";
 import AppFormSubmit from "../components/forms/AppFormSubmit";
 import AppFormText from "../components/forms/AppFormText";
 import Loader from "../components/loader/Loader";
 import ResponseComponent from "./../components/ResponseComponent";
-import CardSwipe from "../components/card-swipe/CardSwipe";
 
 const urlSchema = Yup.string().required().max(1000, "The url is too long.");
 
@@ -24,14 +24,13 @@ interface IState {
   data: RequestResult;
   loading: boolean;
 }
-
 const HomePage: FunctionComponent<HomePageProps> = () => {
   const [state, setState] = useState<IState>({} as IState);
   const navigate = useNavigate();
 
   let { code } = useParams();
   const methods = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"];
-  const message: any = {
+  const message: Record<number, string> = {
     200: "Great,Everything's fine",
     201: "Congratulations! Your request has successfully manifested into existence.",
     204: "No content here, just like my weekend plans..",
@@ -56,8 +55,7 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
       setState({ ...state, data: test.data, loading: false });
     } catch (ex: any) {
       setState({ ...state, loading: false });
-      console.log(ex.error);
-      alert(ex.error);
+      if (ex.error) alert(ex.error);
     }
   };
 
@@ -84,13 +82,12 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
     }
   }, [code]);
 
-
   const disabled = code != undefined ? true : false;
   console.log("Render");
   return (
     <>
+      <Loader loading={state.loading} />
       <Container className="pb-2">
-        <Loader loading={state.loading} />
         <Row className="justify-content-center text-center">
           <Col md={12} lg={12} xs={12}>
             {state.data && (
@@ -172,6 +169,7 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
               <h2>Shared</h2>
               <h2>
                 <Badge
+                  bg="secondary"
                   className="pe-auto"
                   onClick={() => handleShareLink(state.data?.share)}
                 >
