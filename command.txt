@@ -1,1 +1,1 @@
-docker-compose -f docker-compose.yml -p digitiamo up --build -d
+docker-compose -f docker-compose.yml -p dt up --build -d
