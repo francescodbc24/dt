@@ -18,3 +18,16 @@ export const instance = axios.create({
     Expires: "0"
   },
 });
+
+instance.interceptors.response.use(undefined, async (error) => {
+  //Intercept network errors.
+  const networkerror = String(error).toLowerCase();
+  if (networkerror.includes("network error")) {
+    alert(
+      "Check your network connection and try again."
+    );
+  }
+  return Promise.reject(error);
+});
+
+

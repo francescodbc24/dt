@@ -14,7 +14,7 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
 }) => {
   const config = {
     delta: 1, // min distance(px) before a swipe starts.
-    preventScrollOnSwipe: false, // prevents scroll during swipe
+    preventScrollOnSwipe: true, // prevents scroll during swipe
     trackTouch: true, // track touch input
     trackMouse: true, // track mouse input
     rotationAngle: 0, // set a rotation angle
@@ -27,7 +27,7 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
       setPosition((prev) => {
         if (eventData.dir == "Up") {
           return 80;
-        } else if ((eventData.dir = "Down")) {
+        } else if ((eventData.dir == "Down")) {
           return 3;
         }
         return prev;

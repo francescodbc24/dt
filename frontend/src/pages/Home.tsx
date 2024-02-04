@@ -13,10 +13,14 @@ import AppFormText from "../components/forms/AppFormText";
 import Loader from "../components/loader/Loader";
 import ResponseComponent from "./../components/ResponseComponent";
 
-const urlSchema = Yup.string().required().max(1000, "The url is too long.");
+const urlSchema = Yup.string().required().max(1000,"The url is to long").matches(
+  /^(?:http|ftp)s?:\/\/(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?(?:\/?|[\/?]\S+)$/i,
+  'Invalid URL'
+);
 
 const validationSchema = Yup.object().shape({
   url: urlSchema,
+  method:Yup.string().required()
 });
 interface HomePageProps {}
 
@@ -46,13 +50,11 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
     try {
       setState({ ...state, loading: true });
       await url_service.setCsfr();
-      const test = await url_service.post({
+      const data = await url_service.post({
         url: values.url,
         method: values.method,
       });
-      console.log(test);
-
-      setState({ ...state, data: test.data, loading: false });
+      setState({ ...state, data: data.data, loading: false });
     } catch (ex: any) {
       setState({ ...state, loading: false });
       if (ex.error) alert(ex.error);
@@ -62,13 +64,13 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
   const handleShareCode = async (code: string) => {
     try {
       setState({ ...state, loading: true });
-      //const data = await url_service.get("2AEVU0J0T8");
       const data = await url_service.get(code);
       setState({ ...state, data: data.data, loading: false });
       console.log(data);
     } catch (ex: any) {
       setState({ ...state, loading: false });
-      alert(ex.error);
+      if(ex.error)
+        alert(ex.error);
     }
   };
 
@@ -82,7 +84,7 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
     }
   }, [code]);
 
-  const disabled = code != undefined ? true : false;
+  const disabled = code != undefined;
   console.log("Render");
   return (
     <>
