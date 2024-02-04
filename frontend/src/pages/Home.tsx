@@ -13,14 +13,17 @@ import AppFormText from "../components/forms/AppFormText";
 import Loader from "../components/loader/Loader";
 import ResponseComponent from "./../components/ResponseComponent";
 
-const urlSchema = Yup.string().required().max(1000,"The url is to long").matches(
-  /^(?:http|ftp)s?:\/\/(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?(?:\/?|[\/?]\S+)$/i,
-  'Invalid URL'
-);
+const urlSchema = Yup.string()
+  .required()
+  .max(1000, "The url is to long")
+  .matches(
+    /^(?:http|ftp)s?:\/\/(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?(?:\/?|[\/?]\S+)$/i,
+    "Invalid URL"
+  );
 
 const validationSchema = Yup.object().shape({
   url: urlSchema,
-  method:Yup.string().required()
+  method: Yup.string().required(),
 });
 interface HomePageProps {}
 
@@ -66,11 +69,10 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
       setState({ ...state, loading: true });
       const data = await url_service.get(code);
       setState({ ...state, data: data.data, loading: false });
-      console.log(data);
+      //console.log(data);
     } catch (ex: any) {
       setState({ ...state, loading: false });
-      if(ex.error)
-        alert(ex.error);
+      if (ex.error) alert(ex.error);
     }
   };
 
@@ -85,7 +87,7 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
   }, [code]);
 
   const disabled = code != undefined;
-  console.log("Render");
+  //console.log("Render");
   return (
     <>
       <Loader loading={state.loading} />
@@ -169,16 +171,16 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
           <Row className="justify-content-center text-center">
             <Col>
               <h2>Shared</h2>
-              <h2>
-                <Badge
-                  bg="secondary"
-                  className="pe-auto"
-                  onClick={() => handleShareLink(state.data?.share)}
-                >
-                  {" "}
-                  {window.location.origin + "/" + state.data?.share}
-                </Badge>
-              </h2>
+
+              <Badge
+                style={{ cursor: "pointer", fontSize: "1rem" }}
+                bg="secondary"
+                className="pe-auto"
+                onClick={() => handleShareLink(state.data?.share)}
+              >
+                {" "}
+                {window.location.origin + "/" + state.data?.share}
+              </Badge>
             </Col>
           </Row>
         )}

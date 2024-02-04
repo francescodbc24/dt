@@ -36,7 +36,7 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
 
     ...config,
   });
-  console.log("position", position);
+  //console.log("position", position);
   return (
     <div
       {...handlers}
