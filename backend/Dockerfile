@@ -1,11 +1,10 @@
-FROM python:3.11
+FROM python:3.11.7-slim
 
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 # Copy the application files into the image
 COPY . /app/
-# Required to install mysqlclient with Pip
-RUN apt-get update
+
 
 # Install pipenv
 RUN pip install --upgrade pip 
