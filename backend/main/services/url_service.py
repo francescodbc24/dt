@@ -1,13 +1,8 @@
 import httpx
 from httpx import Response as HttpxResponse,Headers
 from typing import List
-from urllib.parse import urlparse
-from urllib.request import urlopen 
-from time import time 
-from main.utils.validation import valid_url
-from datetime import datetime
 from typing import Tuple
-
+from main.utils.validation import url_validator
 from pydantic import BaseModel
 from typing import List, Optional
 
@@ -33,12 +28,13 @@ class Metrics(BaseModel):
     first_iteration: float = 0
 
 class UrlService():
-    #TODO valid url??
     def analyze_url(self,url:str,method:str)->Tuple[Request, List[Response]]:
         if url is None:
             raise ValueError()
         if not isinstance(url,str):
             raise ValueError()
+        if not url_validator(url):
+            raise ValueError("Invalid url")
         
         request:Request=Request()
         responses:List[Response] = []
@@ -70,7 +66,7 @@ class UrlService():
                                 location=self.__get_header(history.headers,"location"))
             responses.append(response)
         if method == "GET":
-            metrics:Metrics=self.__page_speed(url)
+            metrics:Metrics=self.__page_speed(response_get.request.url)
 
         request.page_load=metrics.page_load
         request.first_iteration=metrics.first_iteration
@@ -79,8 +75,8 @@ class UrlService():
     
     def __page_speed(self,url:str):
         metrics:Metrics= Metrics()
-        base_url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={}&strategy=mobile"
-        # full url
+        key=""
+        base_url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={}&strategy=mobile&locale=en&key="+key        # full url
         full_url = base_url.format(url)
         response = httpx.get(full_url,timeout=60)
         data=response.json()

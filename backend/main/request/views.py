@@ -3,15 +3,12 @@ from rest_framework.response import Response
 from main.models import RequestHTTP,ResponseHTTP
 from .serializer import RequestHTTPResponseSerializer
 from typing import List
-from urllib.parse import urlparse
 from main.services.url_service import url_service
 from django.views.decorators.csrf import ensure_csrf_cookie,csrf_protect
-from django.utils.decorators import method_decorator
 from rest_framework.permissions import AllowAny
-from http import HTTPMethod
 from rest_framework.decorators import api_view,permission_classes
-from django.shortcuts import get_object_or_404
 from main.utils.response import Ok,BadRequest,NotFound,InternalServerError
+from main.utils.validation import url_validator
 import sys
 import random
 import string
@@ -56,11 +53,12 @@ def post(request,method):
     data["method"]=method
     serializer=RequestHTTPResponseSerializer(data=data)
     serializer.is_valid()
+    
     try:
         url = data["url"]
         method=data["method"]
         request,responses=url_service.analyze_url(url,method)
-
+        
         entity= RequestHTTP(domain=request.domain,
                                 url=url,
                                 scheme=request.scheme,

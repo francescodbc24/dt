@@ -17,6 +17,12 @@ class TestUnit:
         response =client.post("/api/http/"+method+"/",None)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
     
+    @pytest.mark.parametrize(
+    "url",
+    ["www","google",".com",""])
+    def test_analyse_with_wrong_url_return_400(self,client:APIClient,url):
+        response =client.post("/api/http/POST/",{"url":url})
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     
 @pytest.mark.django_db

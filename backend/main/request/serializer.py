@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from main.models import RequestHTTP,ResponseHTTP
-from main.utils.response import Ok,BadRequest,NotFound
-
+from main.utils.validation import url_validator
 
 class ResponseHTTPSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,6 +50,8 @@ class RequestHTTPResponseSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("url is required")
         if self.initial_data['url'] is None:
             raise serializers.ValidationError("url cant be empty")
+        if not url_validator(self.initial_data['url']):
+            raise serializers.ValidationError("url is invalid")
         if 'method' not in self.initial_data:
             raise serializers.ValidationError("method is required")
         if self.initial_data['method'] is None:
