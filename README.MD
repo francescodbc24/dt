@@ -11,6 +11,8 @@ run `docker-compose -f docker-compose.yml -p dt up --build -d`
 ## Esegue manualmente
 
 Assicurati di avere PostgreSQL installato sul tuo computer e crea un database, ad esempio chiamato "digitiamo".  
+
+Nel file .env della cartella backend/core/, configura le credenziali di accesso al database
 ### backend
 Dentro la cartella del backend, nel terminale, esegui i seguenti passaggi:
 - python3.11 -m venv ".digitiamo"
