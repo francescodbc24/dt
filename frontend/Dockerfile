@@ -18,6 +18,10 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
+# set permissions to images 777
+RUN find /usr/share/nginx/html -type f -name "*.png" -exec chmod 777 {} \;
+RUN find /usr/share/nginx/html -type f -name "*.svg" -exec chmod 777 {} \;
+
 EXPOSE 80
 EXPOSE 443
 

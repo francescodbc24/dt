@@ -25,7 +25,6 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
   const handlers = useSwipeable({
     onSwiping: (eventData) => {
       setPosition((prev) => {
-        console.log(eventData)
         if (eventData.dir == "Up") {          
           return 80;
         } else if ((eventData.dir == "Down")) {          
@@ -36,7 +35,7 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
     },
     ...config,
   });
-  console.log("position", position);
+  //console.log("position", position);
   return (
     <div
     data-testid="drawer-test"
