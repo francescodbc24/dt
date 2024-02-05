@@ -34,9 +34,8 @@ interface IState {
 const HomePage: FunctionComponent<HomePageProps> = () => {
   const [state, setState] = useState<IState>({} as IState);
   const navigate = useNavigate();
-
   let { code } = useParams();
-  const methods = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"];
+  const methods = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"];  
   const message: Record<number, string> = {
     200: "Great,Everything's fine",
     201: "Congratulations! Your request has successfully manifested into existence.",
@@ -108,7 +107,7 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
               <AppForm
                 validationSchema={validationSchema}
                 initialValues={{
-                  url: state.data?.url,
+                  url: state.data?.url ,
                   method: state.data?.method ? state.data?.method : "GET",
                 }}
                 onSubmit={handleAnalyseUrl}
@@ -134,10 +133,11 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
             </Card>
           </Col>
         </Row>
-        <Row className="m-2-xs">
+        <Row  className="m-2-xs">
           <Col lg={4}>
             {state.data && (
               <RequestComponent
+              data-testid="request-component"
                 domain={state.data.domain}
                 scheme={state.data.scheme}
                 path={state.data.path}

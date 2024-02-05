@@ -7,7 +7,7 @@ interface FormSubmitProps extends ButtonProps {}
 const AppFormSubmit: FunctionComponent<FormSubmitProps> = ({}) => {
   const { handleSubmit } = useFormikContext();
   return (
-    <Button className="m-1" onClick={() => handleSubmit()}>
+    <Button data-testid="button-analyse" className="m-1" onClick={() => handleSubmit()}>
       <MdSearch size={"1.4rem"} />
     </Button>
   );

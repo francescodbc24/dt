@@ -13,7 +13,7 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
   first_iteraction = 0,
 }) => {
   const config = {
-    delta: 1, // min distance(px) before a swipe starts.
+    delta: 5, // min distance(px) before a swipe starts.
     preventScrollOnSwipe: true, // prevents scroll during swipe
     trackTouch: true, // track touch input
     trackMouse: true, // track mouse input
@@ -25,20 +25,21 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
   const handlers = useSwipeable({
     onSwiping: (eventData) => {
       setPosition((prev) => {
-        if (eventData.dir == "Up") {
+        console.log(eventData)
+        if (eventData.dir == "Up") {          
           return 80;
-        } else if ((eventData.dir == "Down")) {
+        } else if ((eventData.dir == "Down")) {          
           return 3;
         }
         return prev;
       });
     },
-
     ...config,
   });
-  //console.log("position", position);
+  console.log("position", position);
   return (
     <div
+    data-testid="drawer-test"
       {...handlers}
       style={{ height: position + "vh" }}
       className="drawer d-block d-sm-none"
@@ -131,7 +132,7 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
                   },
                 },
                 {
-                  limit: 10,
+                  limit: 20,
                   color: "#EA4228",
                   showTick: true,
                   tooltip: {
@@ -157,7 +158,7 @@ const CardSwipe: FunctionComponent<CardSwipeProps> = ({
             }}
             value={first_iteraction}
             minValue={1}
-            maxValue={10}
+            maxValue={20}
           />
         </Col>
       </Row>
